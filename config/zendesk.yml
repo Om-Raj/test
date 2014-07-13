@@ -1,0 +1,11 @@
+development: 
+  client_secret_key: ""
+  client_id: ""
+
+staging:
+  client_secret_key: ""
+  client_id: ""
+
+production:
+  client_secret_key: ""
+  client_id: ""

@@ -1,0 +1,21 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  code_200: "Success"
+  code_302: "Not found"
+  code_400: "Bad Request"
+  code_401: "Unauthorized"
+  code_404: "Not Found"
+  code_409: "Already Exist"
+  code_500: "Internal Server Error"
+  already_authenticated: "app_already_authenticated"
+  param_missing: "required_parameters_missing"
+  auth_successful: "authenticated_successfully"
+  auth_fail: "authentication_failed"
+  message: "message"
+  error: "error"
+  app_not_authentication: "app not authentication with zendesk"
+  people_email_not_found: "people email address not found"
+  people_id_not_found: "people id not found on zendesk"
+  api_missing_required: "Required parameters missing."
