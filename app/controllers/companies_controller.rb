@@ -1,6 +1,6 @@
 require 'lib_people'
 class CompaniesController < ApplicationController
-  def index
+  def compeny
     subdomain_name = params[:subdomain_name]
     pipeline_company_id = params[:pipeline_company_id]
     pipeline_secret = params[:pipeline_secret]
