@@ -94,4 +94,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def get_company_or_deals(subdomain_name,pipeline_company_id,pipeline_secret,type)
+    if subdomain_name && pipeline_company_id && pipeline_secret
+      people = PipeLineDeals.get_people_associated_company_or_deals(pipeline_company_id,pipeline_secret,type)
+      return_json_obj(people,subdomain_name)
+    else
+      error_obj = get_exception_object(I18n.t(:code_400),I18n.t(:api_missing_required),400)
+      render :json => error_obj.to_json, :status => 400  and return
+    end
+  end
+
 end
