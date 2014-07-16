@@ -17,7 +17,7 @@ module PipeLineDeals
         error = request_str_response.parsed_response["error"]
         response_return(error,403)
       else
-        #todo
+        response_return('',response_code)
     end
   end
 
@@ -34,7 +34,8 @@ module PipeLineDeals
           return_data << 403
           return_data << data
         else
-          #todo
+          return_data << get_code
+          return_data << data
       end
     end
     return return_data
@@ -60,29 +61,29 @@ module PipeLineDeals
     end
   end
 
-  # getting email address form  pipeline user id
-  def self.get_people_associated_company(company_id,pipeline_secret)
-    request_url = "https://api.pipelinedeals.com/api/v3/companies/#{company_id}/people.json?api_key=#{pipeline_secret}"
-    request_str_response = HTTParty.get(request_url)
 
-    p response_code = request_str_response.response.code.to_i
+  # getting email address form  pipeline user id
+  def self.get_people_associated_company_or_deals(company_id,pipeline_secret,type)
+    request_url = "https://api.pipelinedeals.com/api/v3/#{type}/#{company_id}/people.json?api_key=#{pipeline_secret}"
+    request_str_response = HTTParty.get(request_url)
+    response_code = request_str_response.response.code.to_i
     case response_code
       when 200
         data = JSON.parse request_str_response.response.body
-        company_data = company_data_parse(data)
-        company_data ? company_people_email(company_data) : response_return("people email address associated with company not found",403)
+        company_data = people_data_parse(data)
+        company_data ? people_email(company_data) : response_return("people email address associated with #{type} not found",403)
       when 403
         data =JSON.parse request_str_response
         error = data["error"]
         response_return(error,403)
       else
-        #todo
+        response_return("",response_code)
     end
   end
 
 
   #data parser for user details  entries object
-  def self.company_data_parse(json)
+  def self.people_data_parse(json)
     company_data  = nil
     if json
       data = []
@@ -101,7 +102,7 @@ module PipeLineDeals
     return company_data
   end
 
-  def self.company_people_email(data)
+  def self.people_email(data)
     return_data = []
     if data
       return_data << 200
@@ -111,7 +112,7 @@ module PipeLineDeals
   end
 
 
-  def self.get_company_people_zendesk_id(data,subdomain_name,access_token,token_type)
+  def self.people_zendesk_id(data,subdomain_name,access_token,token_type)
     data_emails_array = data
     return_data = []
     if data_emails_array.any?

@@ -16,7 +16,7 @@ class ZendeskController < ApplicationController
     if subdomain_name && unique_identifier && secret
       session[:subdomain] = subdomain_name
       zen_request_url = ZendeskAuth.get_zendesk_auth_url(subdomain_name,unique_identifier,secret,zendesk_get_access_token_url)
-      zen_request_url ? (redirect_to zen_request_url) : (redirect_to render_errors_messages(I18n.t(:message),I18n.t(:already_authenticated)))
+      redirect_to URI.encode(zen_request_url)
     else
       redirect_to render_errors_messages(I18n.t(:error),I18n.t(:param_missing))
     end

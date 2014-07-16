@@ -1,9 +1,11 @@
 module ZendeskAuth
   def self.get_zendesk_auth_url(subdomain_name,unique_identifier,secret_key,zendesk_get_access_token_url)
-    url = nil
-    if User.subdomain_exists(subdomain_name).blank?
+    url = "https://#{subdomain_name}.zendesk.com/oauth/authorizations/new?response_type=code&redirect_uri=#{zendesk_get_access_token_url}/&client_id=#{unique_identifier}&scope=read write"
+    userObj = User.subdomain_exists(subdomain_name)
+    if userObj.empty?
       User.saved_subdomain(subdomain_name,unique_identifier,secret_key)
-      url = "https://#{subdomain_name}.zendesk.com/oauth/authorizations/new?#{CGI.escape("response_type=code&redirect_uri=#{zendesk_get_access_token_url}/&client_id=#{unique_identifier}&scope=read write")}"
+    else
+      User.update_identifier_key(userObj,unique_identifier,secret_key)
     end
     return url
   end

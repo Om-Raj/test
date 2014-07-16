@@ -6,6 +6,12 @@ class User < ActiveRecord::Base
     User.create(:subdomain => subdomain_name,:unique_identifier => unique_identifier,:secret => secret_key)
   end
 
+  def self.update_identifier_key(userObj,unique_identifier,secret_key)
+    userObj[0].unique_identifier = unique_identifier
+    userObj[0].secret = secret_key
+    userObj[0].save
+  end
+
   def self.update_subdomain(userObj,token_type,access_token)
     userObj[0].token_type = token_type
     userObj[0].access_token = access_token

@@ -25,7 +25,6 @@ class ApplicationController < ActionController::Base
     error_obj[:Exception][:StatusCode] = code
     return error_obj
   end
- 
 
   def zendesk_people_tickets(people_zendesk_id,subdomain_name,access_token,token_type)
     return data_parse_for_tickets(PipeLineDeals.get_all_tickets_people(subdomain_name,people_zendesk_id,access_token,token_type))
@@ -34,9 +33,8 @@ class ApplicationController < ActionController::Base
   def data_parse_for_tickets(json)
     ticket_lists  = []
     unless json.blank?
-	json_tickets = json['tickets']
-      if json_tickets &&  json_tickets.length >= 0
-        json_tickets.each_with_index do |page, index|
+      if !json['tickets'].blank? and json['tickets'].length >= 0
+        json['tickets'].each_with_index do |page, index|
           ticket_lists << { :subject => page['subject'],
                             :description => page['description'],
                             :request_date => DateTime.strptime(page['created_at'],'%Y-%m-%dT%H:%M:%S%z') ,
@@ -49,6 +47,51 @@ class ApplicationController < ActionController::Base
       end
     end
     return ticket_lists
+  end
+
+  def company_or_deals_people_tickets(data,subdomain_name)
+    subdomain_exists = User.subdomain_exists(subdomain_name)
+    if subdomain_exists
+      access_token = subdomain_exists[0]['access_token']
+      token_type = subdomain_exists[0]['token_type']
+      people_pipeline_email_with_zendesk_id_array = PipeLineDeals.people_zendesk_id(data,subdomain_name,access_token,token_type)
+      get_all_company_or_deals_people_tickets(people_pipeline_email_with_zendesk_id_array,subdomain_name,access_token,token_type)
+    end
+  end
+
+
+
+  def get_all_company_or_deals_people_tickets(email_with_uid_array,subdomain_name,access_token,token_type)
+    data_array = []
+    if email_with_uid_array.any?
+      email_with_uid_array.each do |data|
+        response = Hash.new
+        data_hash = data[0]
+        pipline_email = data_hash[:email]
+        zendesk_user_id = data_hash[:zendesk_id]
+        response["email"]= pipline_email
+        response["tickets"] =nil
+        if zendesk_user_id
+          response["tickets"] = zendesk_people_tickets(zendesk_user_id,subdomain_name,access_token,token_type)
+        end
+        data_array << response
+      end
+    end
+    render :json => data_array.to_json, :status => 200 and return false
+  end
+
+
+  def return_json_obj(people,subdomain_name)
+    if people
+      code = people[0]
+      data = people[1]
+      if code == 200
+        company_or_deals_people_tickets(data,subdomain_name)
+      else
+        error_obj = get_exception_object(code,data,code)
+        render :json => error_obj.to_json, :status => code  and return
+      end
+    end
   end
 
 end

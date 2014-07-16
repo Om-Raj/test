@@ -8,10 +8,9 @@ PipelinedealsZendesk::Application.routes.draw do
   match "api/v1/zendeskAuthentication(/:subdomain_name)(/:unique_identifier)(/:secret)" => 'zendesk#zendesk_authorizations' , :as => :zendesk_authorizations, :via => :get
   get "zendesk/get_access_token"
 
-
-
   match "api/v1/PeopleAllTickets(/:subdomain_name)(/:pipeline_user_id)(/:pipeline_secret)" => 'people#index' , :as => :get_all_tickets_for_people, :via => :get
   match "api/v1/CompaniesAllTickets(/:subdomain_name)(/:pipeline_company_id)(/:pipeline_secret)" => 'companies#index' , :as => :get_all_tickets_for_companies, :via => :get
+  match "api/v1/DealsAllTickets(/:subdomain_name)(/:pipeline_deals_id)(/:pipeline_secret)" => 'deals#index' , :as => :get_all_tickets_for_deals, :via => :get
 
   #match "api/v1/AllTicketsUser(/:subdomain_name)(/:pipeline_user_id)(/:pipeline_secret)" => 'pipeline#user' , :as => :get_all_tickets_for_user, :via => :get
   # The priority is based upon order of creation:
