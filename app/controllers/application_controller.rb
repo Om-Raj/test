@@ -78,20 +78,20 @@ class ApplicationController < ActionController::Base
       end
     end
     render :json => data_array.to_json, :status => 200 and return false
-  end
-
+  end 
 
   def return_json_obj(people,subdomain_name,type)
     if people
       code = people[0]
       data = people[1]
       if code == 200
-        if type == "company_or_deals"
+        get_type = type
+        case get_type
+          when "company_or_deals"
         company_or_deals_people_tickets(data,subdomain_name)
       else
           people_zendesk_id(data,subdomain_name)
-        end
-
+        end 
       else
         error_obj = get_exception_object(code,data,code)
         render :json => error_obj.to_json, :status => code  and return

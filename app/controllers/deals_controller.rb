@@ -6,5 +6,4 @@ class DealsController < ApplicationController
     pipeline_secret = params[:pipeline_secret]
     get_company_or_deals(subdomain_name,pipeline_deals_id,pipeline_secret,'deals')
   end
-
 end

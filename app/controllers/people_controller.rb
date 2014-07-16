@@ -9,5 +9,4 @@ class PeopleController < ApplicationController
       return_json_obj(people_email,subdomain_name,"people")
     end
   end
-
 end
