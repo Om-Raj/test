@@ -8,7 +8,7 @@ class ZendeskController < ApplicationController
   def render_errors_messages(type,mess)
     return "https://www.pipelinedeals.com/admin/partner_integrations?"+ type +"="+ mess.to_s
   end
-
+  #redirect to zendesk for app authorizations
   def zendesk_authorizations
     subdomain_name = params[:subdomain_name]
     unique_identifier = params[:unique_identifier]
@@ -22,6 +22,7 @@ class ZendeskController < ApplicationController
     end
   end
 
+  #get code params from zendesk and make request for get access_token and token_type.
   def get_access_token
     if params[:code]
       subdomain_exists = User.subdomain_exists(session[:subdomain])

@@ -46,7 +46,7 @@ module PipeLineDeals
     req_query_str = "https://#{subdomain_name}.zendesk.com/api/v2/search.json?query=type:user+email:#{email}"
     tickets_response = HTTParty.get(req_query_str, :headers => {"Authorization" => "#{token_type} #{access_token}"})
     if tickets_response.response.code.to_i == 200
-     data= JSON.parse tickets_response.response.body
+      data= JSON.parse tickets_response.response.body
       return data["results"].any? ? data["results"][0]["id"] : nil
     end
   end
@@ -102,6 +102,7 @@ module PipeLineDeals
     return company_data
   end
 
+  # return people email
   def self.people_email(data)
     return_data = []
     if data
@@ -111,7 +112,7 @@ module PipeLineDeals
     return return_data
   end
 
-
+  # return people zendesk id
   def self.people_zendesk_id(data,subdomain_name,access_token,token_type)
     data_emails_array = data
     return_data = []
