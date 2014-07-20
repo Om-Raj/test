@@ -10,15 +10,15 @@ describe CompaniesController do
 
 
   describe "only subdomain parameter" do
-    it "should be bad request" do
+    it "should be required parameters missing" do
       get 'index', {:subdomain_name => 'pipelinedeals'}
-      expect(response.status).to eq(400) #Required parameters missing (Bad Request)
+      expect(response.status).to eq(400)
     end
   end
 
 
   describe "for subdomain and secret parameters" do
-    it "should be bad request" do
+    it "should be required parameters missing" do
       get 'index', {:subdomain_name => 'pipelinedeals',:pipeline_secret => 'CuQxWURE6tHVrURlucW'}
       expect(response.status).to eq(400)
     end
@@ -26,7 +26,7 @@ describe CompaniesController do
 
 
   describe "for subdomain,invalid secret and companyid parameters" do
-    it "should be bad request" do
+    it "should be error 401 Unauthorized" do
       get 'index', {:subdomain_name => 'pipelinedeals',:pipeline_secret => 'invalid',:pipeline_company_id => '21295979'}
       expect(response.status).to eq(401)
     end
@@ -34,7 +34,7 @@ describe CompaniesController do
 
 
   describe "for subdomain, secret and invalid companyid parameters" do
-    it "should be bad request" do
+    it "should be error 403 Forbidden" do
       get 'index', {:subdomain_name => 'pipelinedeals',:pipeline_secret => 'CuQxWURE6tHVrURlucW',:pipeline_company_id => '045334'}
        expect(response.status).to eq(403) #Couldn't find Company with ID
     end
@@ -42,14 +42,14 @@ describe CompaniesController do
 
 
   describe "for GET request with valid subdomain,secret and companyid parameters" do
-    it "should be bad request" do
+    it "should be request has succeeded" do
       get 'index', {:subdomain_name => 'pipelinedeals',:pipeline_secret => 'CuQxWURE6tHVrURlucW',:pipeline_company_id => '21295979'}
       expect(response.status).to eq(200)
     end
   end
 
   describe "for POST request with valid subdomain,secret and companyid parameters" do
-    it "should be bad request" do
+    it "should be request has succeeded" do
       post 'index', {:subdomain_name => 'pipelinedeals',:pipeline_secret => 'CuQxWURE6tHVrURlucW',:pipeline_company_id => '21295979'}
       expect(response.status).to eq(200)
     end

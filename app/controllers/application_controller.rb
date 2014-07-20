@@ -51,11 +51,13 @@ class ApplicationController < ActionController::Base
 
   def company_or_deals_people_tickets(data,subdomain_name)
     subdomain_exists = User.subdomain_exists(subdomain_name)
-    if subdomain_exists
+    if subdomain_exists.any?
       access_token = subdomain_exists[0]['access_token']
       token_type = subdomain_exists[0]['token_type']
       people_pipeline_email_with_zendesk_id_array = PipeLineDeals.people_zendesk_id(data,subdomain_name,access_token,token_type)
       get_all_company_or_deals_people_tickets(people_pipeline_email_with_zendesk_id_array,subdomain_name,access_token,token_type)
+    else
+      api_missing_required(I18n.t(:app_not_authorize_with_zendesk))
     end
   end
 
@@ -104,12 +106,12 @@ class ApplicationController < ActionController::Base
       people = PipeLineDeals.get_people_associated_company_or_deals(pipeline_company_id,pipeline_secret,type)
       return_json_obj(people,subdomain_name,"company_or_deals")
     else
-      api_missing_required
+      api_missing_required(I18n.t(:api_missing_required))
     end
   end
 
-  def api_missing_required
-      error_obj = get_exception_object(I18n.t(:code_400),I18n.t(:api_missing_required),400)
+  def api_missing_required(mess)
+    error_obj = get_exception_object(I18n.t(:code_400),mess,400)
       render :json => error_obj.to_json, :status => 400  and return
     end
 

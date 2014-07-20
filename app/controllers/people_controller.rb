@@ -9,7 +9,7 @@ class PeopleController < ApplicationController
       people_email = PipeLineDeals.get_people_email(pipeline_user_id,pipeline_secret)
       return_json_obj(people_email,subdomain_name,"people")
     else
-      api_missing_required
+      api_missing_required(I18n.t(:api_missing_required))
     end
   end
 end
