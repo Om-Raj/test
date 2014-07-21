@@ -14,11 +14,11 @@
 ActiveRecord::Schema.define(:version => 20140622090042) do
 
   create_table "users", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email"
+    t.string   "subdomain"
+    t.string   "unique_identifier"
+    t.string   "secret"
     t.string   "access_token"
+    t.string   "token_type"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
