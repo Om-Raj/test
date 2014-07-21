@@ -1,14 +1,14 @@
 require 'spec_helper'
 describe ZendeskController do
 
-  describe "without any parameters" do
+ context 'when no parameters defined' do
     it "should be bad request" do
       get 'zendesk_authorizations'
       expect(response.location).to match("required_parameters_missing")
     end
   end
 
-  describe "create request with valid parameters" do
+  context "when request with valid parameters" do
     it "should be redirect to pipelinedeals.zendesk.com for request code" do
       @request.host = "localhost:3000"
       get 'zendesk_authorizations' , {:subdomain_name => 'pipelinedeals',:unique_identifier => 'pipeline_deals_demo',:secret => '38dc2bd42c19f71dad666a013c5fa70476c6936d325836ec4fbf2c61d2b7314e'}
@@ -17,7 +17,7 @@ describe ZendeskController do
   end
 
 
-  describe "in get_access_token method should have no code parameters" do
+  context "when get_access_token method should have no code parameters" do
     it "should be bad request" do
       get 'get_access_token'
       expect(response.location).to match("authentication_failed")
