@@ -134,4 +134,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def zendesk_request_token_url(subdomain,code,unique_identifier,secret,zendesk_get_access_token_url)
+    return ZendeskAuth.request_token_url(subdomain,code,unique_identifier,secret,zendesk_get_access_token_url)
+  end
+
+  def save_access_token(zendesk_response,subdomain)
+   return ZendeskAuth.get_and_save_access_token(zendesk_response,subdomain)
+  end
+
 end
