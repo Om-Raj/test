@@ -24,12 +24,10 @@ class ZendeskController < ApplicationController
 
   #get code params from zendesk and make request for get access_token and token_type.
   def get_access_token
-     unless params[:code].blank?
-      subdomain = session[:subdomain]
-      code = params[:code]
+     unless params[:code].blank? 
       unique_identifier = get_user_secret_unique_identifier["unique_identifier"]
       secret = get_user_secret_unique_identifier["secret"]
-      request_url = zendesk_request_token_url(subdomain,code,unique_identifier,secret,zendesk_get_access_token_url)
+      request_url = zendesk_request_token_url(session[:subdomain],params[:code],unique_identifier,secret,zendesk_get_access_token_url)
       zendesk_response = HTTParty.post(request_url)
       update_response = save_access_token(zendesk_response,subdomain)
       redirect_to render_errors_messages(I18n.t(:message),I18n.t(:auth_successful)) if update_response
