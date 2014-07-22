@@ -30,9 +30,9 @@ class ZendeskController < ApplicationController
       code = params[:code]
       unique_identifier = subdomain_exists[0]['unique_identifier']
       secret = subdomain_exists[0]['secret']
-      request_url = ZendeskAuth.request_token_url(subdomain,code,unique_identifier,secret,zendesk_get_access_token_url)
-      zendesk_response = HTTParty.post(request_url)
-      update_response = ZendeskAuth.get_and_save_access_token(zendesk_response,subdomain)
+      #request_url = ZendeskAuth.request_token_url(subdomain,code,unique_identifier,secret,zendesk_get_access_token_url)
+      #zendesk_response = HTTParty.post(request_url)
+      #update_response = ZendeskAuth.get_and_save_access_token(zendesk_response,subdomain)
       redirect_to render_errors_messages(I18n.t(:message),I18n.t(:auth_successful)) if update_response
     else
       redirect_to render_errors_messages(I18n.t(:error),I18n.t(:auth_fail))

@@ -1,5 +1,3 @@
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
@@ -41,9 +39,4 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
   #config.include Requests::JsonHelpers, :type => :controller
-end
-
-Capybara.configure do |config|
-  config.app_host    = 'http://127.0.0.1'
-  config.server_port = 3000
 end
