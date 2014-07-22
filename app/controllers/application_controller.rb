@@ -54,17 +54,29 @@ class ApplicationController < ActionController::Base
     if subdomain_exists.any?
       access_token = subdomain_exists[0]['access_token']
       token_type = subdomain_exists[0]['token_type']
+      get_company_or_deals_people_tickets_response(data,subdomain_name,token_type,token_type)
+      #unless access_token.blank?
+      #  people_pipeline_email_with_zendesk_id_array = PipeLineDeals.people_zendesk_id(data,subdomain_name,access_token,token_type)
+      #  get_all_company_or_deals_people_tickets(people_pipeline_email_with_zendesk_id_array,subdomain_name,access_token,token_type)
+      #else
+      #  error_obj = get_exception_object(302,I18n.t(:app_access_token_blank),302)
+      #  render :json => error_obj.to_json, :status => 302  and return
+      #end
+
+    else
+      api_missing_required(I18n.t(:app_not_authorize_with_zendesk))
+    end
+  end
+
+
+  def get_company_or_deals_people_tickets_response(data,subdomain_name,access_token,token_type)
       unless access_token.blank?
       people_pipeline_email_with_zendesk_id_array = PipeLineDeals.people_zendesk_id(data,subdomain_name,access_token,token_type)
       get_all_company_or_deals_people_tickets(people_pipeline_email_with_zendesk_id_array,subdomain_name,access_token,token_type)
     else
         error_obj = get_exception_object(302,I18n.t(:app_access_token_blank),302)
         render :json => error_obj.to_json, :status => 302  and return
-      end
-
-    else
-      api_missing_required(I18n.t(:app_not_authorize_with_zendesk))
-    end
+      end 
   end
 
 
@@ -128,6 +140,24 @@ class ApplicationController < ActionController::Base
       token_type = subdomain_exists[0]['token_type']
       unless access_token.blank?
       people_zendesk_id = PipeLineDeals.get_people_zendesk_id(subdomain_name,people_email,access_token,token_type)
+        get_zendesk_people_tickets_response(people_zendesk_id,subdomain_name,access_token,token_type)
+
+        #if people_zendesk_id
+        #  response["tickets"] = zendesk_people_tickets(people_zendesk_id,subdomain_name,access_token,token_type)
+        #  render :json => response.to_json, :status => 200 and return false
+        #else
+        #  error_obj = get_exception_object(302,I18n.t(:people_id_not_found),302)
+        #  render :json => error_obj.to_json, :status => 302  and return
+        #end
+      else
+        error_obj = get_exception_object(302,I18n.t(:app_access_token_blank),302)
+        render :json => error_obj.to_json, :status => 302  and return
+      end
+    end
+  end
+
+
+  def get_zendesk_people_tickets_response(people_zendesk_id,subdomain_name,access_token,token_type)
       response = Hash.new
       if people_zendesk_id 
         response["tickets"] = zendesk_people_tickets(people_zendesk_id,subdomain_name,access_token,token_type)
@@ -135,13 +165,9 @@ class ApplicationController < ActionController::Base
       else
         error_obj = get_exception_object(302,I18n.t(:people_id_not_found),302)
         render :json => error_obj.to_json, :status => 302  and return
-      end
-      else
-        error_obj = get_exception_object(302,I18n.t(:app_access_token_blank),302)
-        render :json => error_obj.to_json, :status => 302  and return
-      end
-    end
+      end 
   end
+
 
   def zendesk_request_token_url(subdomain,code,unique_identifier,secret,zendesk_get_access_token_url)
     return ZendeskAuth.request_token_url(subdomain,code,unique_identifier,secret,zendesk_get_access_token_url)
